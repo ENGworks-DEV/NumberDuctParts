@@ -85,19 +85,22 @@ namespace NumberDuctParts
         }
 
 
-        private void TESTT(object sender, RoutedEventArgs el)
+        private void NumberPartButton_Click(object sender, RoutedEventArgs el)
         {
             Connector CurrentConnector = null;
             List<Element> RunElements = new List<Element>();
             List<ElementId> RunElementsId = new List<ElementId>();
             base.Hide();
             Element e;
+
             using (Transaction AssingPartNumberT = new Transaction(tools.uidoc.Document, "Assing Part Number"))
             {
                 AssingPartNumberT.Start();
                 e = tools.NewSelection();
                 AssingPartNumberT.Commit();
+                
             }
+
             ConnectorSet connectors = null;
             connectors = this.getConnectorSetFromElement(e);
             int connectCount = 0;
@@ -118,14 +121,14 @@ namespace NumberDuctParts
                 if (flag3)
                 {
                     System.Windows.MessageBox.Show("The elements is not an endpoint", "warning");
-                    base.Show();
+                    base.ShowDialog();
                 }
             }
             bool flag4 = connectCount == 0;
             if (flag4)
             {
                 System.Windows.MessageBox.Show("The element has no connection", "warning");
-                base.Show();
+                base.ShowDialog();
             }
             bool flag5 = connectCount == 1;
             if (flag5)
@@ -136,11 +139,14 @@ namespace NumberDuctParts
                 Element tempElem = e;
                 int iterationsCount = 0;
                 TempConnectors = connectors;
+
+
                 while (tempValue == 1)
                 {
                     int countConnect = 0;
                     RunElements.Add(tempElem);
                     RunElementsId.Add(tempElem.Id);
+
                     foreach (Connector fcon in TempConnectors)
                     {
                         bool flag6 = fcon.IsConnected && fcon.ConnectorType.ToString() != "Curve";
@@ -162,6 +168,7 @@ namespace NumberDuctParts
                     if (flag8)
                     {
                         tempValue = 2;
+                        goto EndLoop;
                     }
                     else
                     {
@@ -171,12 +178,41 @@ namespace NumberDuctParts
                             bool flag9 = !RunElementsId.Contains(cone.Owner.Id);
                             if (flag9)
                             {
+                                //Check if the following element is connected from the side
                                 tempElem = this._doc.GetElement(cone.Owner.Id);
+
+                                Category cat = tempElem.Category;
+                                BuiltInCategory enumCat = (BuiltInCategory)cat.Id.IntegerValue;
+
+                                if (enumCat.ToString() != "OST_FabricationDuctwork")
+                                  { 
+                                    tempValue = 2;
+                                    goto EndLoop;
+                                  }
+                                
                             }
                         }
+
+                       
+                        
                         TempConnectors = this.getConnectorSetFromElement(tempElem);
+
                         foreach (Connector connec in TempConnectors)
                         {
+                            //Check that the previous element is not connecting from side
+                            if(connec.ConnectorType.ToString() == "Curve")
+                            {
+                                foreach (Connector con in connec.AllRefs)
+                                {
+                                    if (RunElementsId.Contains(con.Owner.Id))
+                                    {
+                                        tempValue = 2;
+                                        goto EndLoop;
+                                    }
+                                }
+                            }
+
+                            //Get the next useful connector
                             bool flag10 = connec.IsConnected && connec.ConnectorType.ToString() != "Curve";
                             if (flag10)
                             {
@@ -191,6 +227,7 @@ namespace NumberDuctParts
                             }
                         }
                     }
+                    EndLoop:
                     iterationsCount++;
                 }
                 List<string> listToStringComplete = this.listToString(RunElements);
@@ -205,10 +242,12 @@ namespace NumberDuctParts
                             AssingPartNumberT2.Start();
                             tools.AddToSelection(elmnt, listToStringComplete, RunElements, this.checkBoxDuplicates.IsChecked.Value);
                             string partNumber = tools.createNumbering(this.PrefixBox.Text, this.SeparatorBox.Text, tools.count, this.NumberBox.Text.Length);
+
                             foreach (Element x in tools.selectedElements)
                             {
                                 tools.AssingPartNumber(x, partNumber);
                             }
+
                             bool flag13 = tools.selectedElements.Count != 0;
                             if (flag13)
                             {
@@ -222,9 +261,11 @@ namespace NumberDuctParts
                         }
                     }
                 }
-                base.Show();
+                base.ShowDialog();
             }
         }
+
+
 
         private List<string> listToString(List<Element> RunElements)
         {

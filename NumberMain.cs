@@ -63,46 +63,46 @@ namespace NumberDuctParts
         /// <param name="cats"></param>
         /// <param name="group"></param>
         /// <param name="inst"></param>
-        public static void RawCreateProjectParameterFromExistingSharedParameter(Autodesk.Revit.ApplicationServices.Application app, string name, CategorySet cats, BuiltInParameterGroup group, bool inst)
-        {
-            //Location of the shared parameters
-            string oriFile = app.SharedParametersFilename;
+        //public static void RawCreateProjectParameterFromExistingSharedParameter(Autodesk.Revit.ApplicationServices.Application app, string name, CategorySet cats, BuiltInParameterGroup group, bool inst)
+        //{
+        //    //Location of the shared parameters
+        //    string oriFile = app.SharedParametersFilename;
 
-            //My Documents
-            var newpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        //    //My Documents
+        //    var newpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            //Create txt inside my documents
-            Extract("RenumberParts", newpath, "Resources", "SP_RenumberParts.txt");
+        //    //Create txt inside my documents
+        //    Extract("RenumberParts", newpath, "Resources", "SP_RenumberParts.txt");
 
-            //Create variable with the location on SP.txt inside my documents
-            string tempFile = newpath + @"\SP_RenumberParts.txt";
+        //    //Create variable with the location on SP.txt inside my documents
+        //    string tempFile = newpath + @"\SP_RenumberParts.txt";
 
-            //Change the location of the shared parameters for the SP location
-            app.SharedParametersFilename = tempFile;
-            DefinitionFile defFile = app.OpenSharedParameterFile();
+        //    //Change the location of the shared parameters for the SP location
+        //    app.SharedParametersFilename = tempFile;
+        //    DefinitionFile defFile = app.OpenSharedParameterFile();
 
-            var v = (from DefinitionGroup dg in defFile.Groups
-                     from ExternalDefinition d in dg.Definitions
-                     where d.Name == name
-                     select d);
+        //    var v = (from DefinitionGroup dg in defFile.Groups
+        //             from ExternalDefinition d in dg.Definitions
+        //             where d.Name == name
+        //             select d);
 
 
-            if (v == null || v.Count() < 1) throw new Exception("Invalid Name Input!wwwww");
+        //    if (v == null || v.Count() < 1) throw new Exception("Invalid Name Input!wwwww");
 
-            ExternalDefinition def = v.First();
+        //    ExternalDefinition def = v.First();
 
-            //Place original SP file 
-            app.SharedParametersFilename = oriFile;
+        //    //Place original SP file 
+        //    app.SharedParametersFilename = oriFile;
 
-            //Delete SP temporary file
-            System.IO.File.Delete(tempFile);
+        //    //Delete SP temporary file
+        //    System.IO.File.Delete(tempFile);
 
-            Autodesk.Revit.DB.Binding binding = app.Create.NewTypeBinding(cats);
-            if (inst) binding = app.Create.NewInstanceBinding(cats);
+        //    Autodesk.Revit.DB.Binding binding = app.Create.NewTypeBinding(cats);
+        //    if (inst) binding = app.Create.NewInstanceBinding(cats);
 
-            BindingMap map = (new UIApplication(app)).ActiveUIDocument.Document.ParameterBindings;
-            map.Insert(def, binding, group);
-        }
+        //    BindingMap map = (new UIApplication(app)).ActiveUIDocument.Document.ParameterBindings;
+        //    map.Insert(def, binding, group);
+        //}
 
 
         /// <summary>
@@ -192,53 +192,37 @@ namespace NumberDuctParts
             Category category = ReferenceElem.Category;
             BuiltInCategory enumCategory = (BuiltInCategory)category.Id.IntegerValue;
             BuiltInCategory builtCategory = (BuiltInCategory)Enum.Parse(typeof(BuiltInCategory), ReferenceElem.Category.Id.ToString());
-            bool flag = tools.getNumber(ReferenceElem) == "" & checkBox;
-            if (flag)
-            {
-                tools.selectedElements.Add(ReferenceElem);
+
+            if(checkBox == true)
+            { 
                 foreach (Element elem in completeList)
                 {
-                    Parameter expr_87 = elem.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM);
-                    string arg_AA_0 = (expr_87 != null) ? expr_87.AsValueString() : null;
-                    Parameter expr_9E = ReferenceElem.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM);
-                    if (!(arg_AA_0 == ((expr_9E != null) ? expr_9E.AsValueString() : null)))
+                    Category cat = elem.Category;
+                    BuiltInCategory enumCat = (BuiltInCategory)cat.Id.IntegerValue;
+
+                    if (enumCat.ToString() == "OST_FabricationDuctwork" 
+                        && tools.getNumber(elem) == "")
                     {
-                        goto IL_156;
+                    if(filterParam(ReferenceElem, elem, BuiltInParameter.ELEM_FAMILY_PARAM, 
+                        BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM, BuiltInParameter.FABRICATION_PART_DEPTH_IN, 
+                        BuiltInParameter.FABRICATION_PART_WIDTH_IN, BuiltInParameter.FABRICATION_SERVICE_PARAM,
+                        BuiltInParameter.FABRICATION_PART_LENGTH))
+                        {
+                            selectedElements.Add(elem);
+                        }
                     }
-                    Parameter expr_C0 = elem.get_Parameter(BuiltInParameter.FABRICATION_PART_LENGTH);
-                    string arg_E3_0 = (expr_C0 != null) ? expr_C0.AsValueString() : null;
-                    Parameter expr_D7 = ReferenceElem.get_Parameter(BuiltInParameter.FABRICATION_PART_LENGTH);
-                    if (!(arg_E3_0 == ((expr_D7 != null) ? expr_D7.AsValueString() : null)))
-                    {
-                        goto IL_156;
-                    }
-                    Parameter expr_F6 = elem.get_Parameter(BuiltInParameter.FABRICATION_PART_DEPTH_IN);
-                    string arg_119_0 = (expr_F6 != null) ? expr_F6.AsValueString() : null;
-                    Parameter expr_10D = ReferenceElem.get_Parameter(BuiltInParameter.FABRICATION_PART_DEPTH_IN);
-                    if (!(arg_119_0 == ((expr_10D != null) ? expr_10D.AsValueString() : null)))
-                    {
-                        goto IL_156;
-                    }
-                    Parameter expr_12C = elem.get_Parameter(BuiltInParameter.FABRICATION_PART_WIDTH_IN);
-                    string arg_14F_0 = (expr_12C != null) ? expr_12C.AsValueString() : null;
-                    Parameter expr_143 = ReferenceElem.get_Parameter(BuiltInParameter.FABRICATION_PART_WIDTH_IN);
-                    bool arg_157_0 = arg_14F_0 == ((expr_143 != null) ? expr_143.AsValueString() : null);
-                IL_157:
-                    bool flag2 = arg_157_0;
-                    if (flag2)
-                    {
-                        tools.selectedElements.Add(elem);
-                    }
-                    continue;
-                IL_156:
-                    arg_157_0 = false;
-                    goto IL_157;
+                }
+                if(!selectedElements.Contains(ReferenceElem) && tools.getNumber(ReferenceElem) == "")
+                {
+                    selectedElements.Add(ReferenceElem);
                 }
             }
             else
             {
-                tools.selectedElements.Add(ReferenceElem);
+                selectedElements.Add(ReferenceElem);
             }
+
+
             OverrideGraphicSettings overrideGraphicSettings = new OverrideGraphicSettings();
             System.Drawing.Color colorSelect = MainForm.ColorSelected;
             byte r = colorSelect.R;
@@ -260,52 +244,66 @@ namespace NumberDuctParts
             return tools.doc.GetElement(refElement);
         }
 
-        public static void filterParam(Element elementEx, Autodesk.Revit.DB.BuiltInCategory Cat, BuiltInParameter param01, BuiltInParameter param02,
-            BuiltInParameter param03, BuiltInParameter param04, BuiltInParameter param05)
+
+
+        public static bool filterParam(Element elementEx, Element elementExP, BuiltInParameter param01, BuiltInParameter param02,
+            BuiltInParameter param03, BuiltInParameter param04, BuiltInParameter param05, BuiltInParameter param06)
         {
+            bool result = false;
+
+            string elemParam06 = "n";
 
             string elemParam01 = elementEx.get_Parameter(param01).AsValueString();
             string elemParam02 = elementEx.get_Parameter(param02).AsValueString();
             string elemParam03 = elementEx.get_Parameter(param03).AsValueString();
             string elemParam04 = elementEx.get_Parameter(param04).AsValueString();
             string elemParam05 = elementEx.get_Parameter(param05).AsValueString();
-
-            FilteredElementCollector viewCollector = new FilteredElementCollector(doc, uidoc.ActiveView.Id);
-            List<Element> ducts = new FilteredElementCollector(doc, uidoc.ActiveView.Id)
-                .OfCategory(Cat)
-                .Where(a => a.get_Parameter(param01).AsValueString() == elemParam01)
-                .Where(a => a.get_Parameter(param02).AsValueString() == elemParam02)
-                .Where(a => a.get_Parameter(param03).AsValueString() == elemParam03)
-                .Where(a => a.get_Parameter(param04).AsValueString() == elemParam04)
-                .Where(a => a.get_Parameter(param05).AsValueString() == elemParam05)
-                .ToList();
-
-            foreach (Element x in ducts)
-            {
-                selectedElements.Add(x);
-                ListOfElements.Add(x);
+            try
+            { 
+                elemParam06 = elementEx.get_Parameter(param06).AsValueString();
             }
-        }
-
-        /// <summary>
-        /// Get selected elements
-        /// </summary>
-        /// <returns></returns>
-        public static List<Element> getSelection()
-        {
-            var output = new List<Element>();
-            var selection = uidoc.Selection.GetElementIds();
-            foreach (var item in selection)
+            catch
             {
-                try
+
+            }
+            string elemParam06P = "";
+
+            string elemParam01P = elementExP.get_Parameter(param01).AsValueString();
+            string elemParam02P = elementExP.get_Parameter(param02).AsValueString();
+            string elemParam03P = elementExP.get_Parameter(param03).AsValueString();
+            string elemParam04P = elementExP.get_Parameter(param04).AsValueString();
+            string elemParam05P = elementExP.get_Parameter(param05).AsValueString();
+            try
+            {
+                 elemParam06P = elementExP.get_Parameter(param06).AsValueString();
+            }
+            catch
+            {
+
+            }
+
+
+            if (elemParam01 == elemParam01P)
+            {
+                if (elemParam02 == elemParam02P)
                 {
-                    Element element = doc.GetElement(item);
-                    output.Add(element);
+                    if (elemParam03 == elemParam03P)
+                    {
+                        if (elemParam04 == elemParam04P)
+                        {
+                            if (elemParam05 == elemParam05P)
+                            {
+                                if (elemParam06 == elemParam06P)
+                                {
+                                    result = true;
+                                }
+                            }
+                        }
+                    }
                 }
-                catch (Exception e) { MessageBox.Show(e.Message); }
             }
 
-            return output;
+            return result;
         }
 
 
@@ -325,23 +323,12 @@ namespace NumberDuctParts
 
             if (allBuiltinCategories.Contains(enumCategory))
             {
-                try
+                if(element.get_Parameter(BuiltInParameter.FABRICATION_PART_ITEM_NUMBER).AsString() != null)
                 {
-
                     var value = element.get_Parameter(BuiltInParameter.FABRICATION_PART_ITEM_NUMBER).AsString();
-
                     currentNumber = value;
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
-            }
-
-            else
-            {
-                Guid guid = new Guid("460e0a79-a970-4b03-95f1-ac395c070beb");
-                var value = element.get_Parameter(guid).AsString();
-
-                currentNumber = value;
-            }
+                }             
+            } 
             return currentNumber;
         }
 
@@ -572,24 +559,24 @@ namespace NumberDuctParts
 
             if (allBuiltinCategories.Contains(enumCategory))
             {
-                try
-                {
+                //try
+                //{
                     element.get_Parameter(BuiltInParameter.FABRICATION_PART_ITEM_NUMBER).Set(partNumber);
                     ListOfElements.Add(element);
                     ActualCounter = partNumber;
-                    uidoc.RefreshActiveView();
-                    uidoc.Selection.SetElementIds(new List<ElementId>() { element.Id });
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
+                    //uidoc.RefreshActiveView();
+                    //uidoc.Selection.SetElementIds(new List<ElementId>() { element.Id });
+                //}
+                //catch (Exception ex) { MessageBox.Show(ex.Message); }
             }
 
-            else
-            {
-                Guid guid = new Guid("460e0a79-a970-4b03-95f1-ac395c070beb");
-                element.get_Parameter(guid).Set(partNumber);
-                ListOfElements.Add(element);
-                uidoc.Selection.SetElementIds(new List<ElementId>() { element.Id });
-            }
+            //else
+            //{
+            //    Guid guid = new Guid("460e0a79-a970-4b03-95f1-ac395c070beb");
+            //    element.get_Parameter(guid).Set(partNumber);
+            //    ListOfElements.Add(element);
+            //    uidoc.Selection.SetElementIds(new List<ElementId>() { element.Id });
+            //}
 
         }
 
