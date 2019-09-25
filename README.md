@@ -2,7 +2,7 @@
 
 ![](https://github.com/ENGworks-DEV/RenumberParts/blob/master/RenumberParts/Resources/LogoAndName-01.jpg)
 
-This is a Revit add-in that help you numbering parts for MEP elements for spooling
+This is a Revit add-in that help you numbering fabrication ducts elements for spooling
 
 ## Examples
 
@@ -22,7 +22,7 @@ You can find this addin inside Autodesk app store
 
 ## Contribute ##
 
-RenumberParts is an open-source project. You can make suggestions or track and submit bugs via Github issues.  You can submit your own code to the RenumberParts project via a Github pull request.
+NumberDuctParts is an open-source project. You can make suggestions or track and submit bugs via Github issues.  You can submit your own code to the RenumberParts project via a Github pull request.
 
 ## About ##
 
