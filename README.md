@@ -1,6 +1,6 @@
 # NumberDuctParts
 
-![](https://github.com/ENGworks-DEV/RenumberParts/blob/master/RenumberParts/Resources/LogoAndName-01.jpg)
+![](https://github.com/ENGworks-DEV/NumberDuctParts/blob/master/Resources/LogoAndName-01.png)
 
 This is a Revit add-in that help you numbering fabrication ducts elements for spooling
 
