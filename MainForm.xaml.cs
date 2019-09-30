@@ -38,10 +38,9 @@ namespace NumberDuctParts
             set;
         }
 
+
         public MainForm(ExternalCommandData cmddata_p)
         {
-
-
             this.p_commanddata = cmddata_p;
             this.InitializeComponent();
             this.uiApp = cmddata_p.Application;
@@ -66,7 +65,6 @@ namespace NumberDuctParts
         /// <param name="args"></param>
         private void textChangedEventHandler(object sender, TextChangedEventArgs args)
         {
-
             int c;
             bool isNumeric = int.TryParse(this.NumberBox.Text, out c);
 
@@ -79,10 +77,10 @@ namespace NumberDuctParts
                 SuffixContent suffixContentForm = new SuffixContent();
                 suffixContentForm.Topmost = true;
                 suffixContentForm.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                suffixContentForm.ShowDialog();
-                //MessageBox.Show("Number field should contain only numbers");
+                suffixContentForm.ShowDialog();   
             }
         }
+
 
 
         private void NumberPartButton_Click(object sender, RoutedEventArgs el)
@@ -97,8 +95,12 @@ namespace NumberDuctParts
             {
                 AssingPartNumberT.Start();
                 e = tools.NewSelection();
-                AssingPartNumberT.Commit();
-                
+                AssingPartNumberT.Commit();          
+            }
+
+            if(e == null)
+            {
+                goto CloseApp;
             }
 
             ConnectorSet connectors = null;
@@ -144,7 +146,12 @@ namespace NumberDuctParts
                 while (tempValue == 1)
                 {
                     int countConnect = 0;
+
+                    if(checkRoundDucts(this.Round_Ducts.IsChecked.Value, tempElem))
+                    { 
                     RunElements.Add(tempElem);
+                    }
+
                     RunElementsId.Add(tempElem.Id);
 
                     foreach (Connector fcon in TempConnectors)
@@ -261,8 +268,13 @@ namespace NumberDuctParts
                         }
                     }
                 }
-                base.ShowDialog();
+
+                
+                
             }
+
+        CloseApp:;
+        base.ShowDialog();
         }
 
 
@@ -442,6 +454,32 @@ namespace NumberDuctParts
             ColorSelected = colorDialog.Color;
         }
 
+        /// <summary>
+        /// if checkbox round ducts is checked filter the round ducts
+        /// </summary>
+        bool checkRoundDucts(bool checkBox, Element elm)
+        {
+            bool result = false;
+
+            if (checkBox)
+            {
+                result = true;
+            }
+            else
+            {
+                if (elm.LookupParameter("Main Primary Diameter") != null)
+                {
+
+                    result = false;
+                }
+                else
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// Writes string used as separator to an internal field
@@ -453,16 +491,6 @@ namespace NumberDuctParts
         //        Separator = this.SeparatorBox.Text;    
         //}
 
-
-        /// <summary>
-        /// Colorize all elements in view grouping them by its prefix
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ColorByPrefix_Click(object sender, RoutedEventArgs e)
-        {
-            tools.ColorInView();
-        }
 
         public void SeparatorBox_TextChanged(object sender, TextChangedEventArgs e)
         {

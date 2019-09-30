@@ -201,8 +201,10 @@ namespace NumberDuctParts
                     BuiltInCategory enumCat = (BuiltInCategory)cat.Id.IntegerValue;
 
                     if (enumCat.ToString() == "OST_FabricationDuctwork" 
-                        && tools.getNumber(elem) == "")
+                        && getNumber(elem) == "" && elem.get_Parameter(BuiltInParameter.FABRICATION_PART_DEPTH_IN) != null)
                     {
+
+
                     if(filterParam(ReferenceElem, elem, BuiltInParameter.ELEM_FAMILY_PARAM, 
                         BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM, BuiltInParameter.FABRICATION_PART_DEPTH_IN, 
                         BuiltInParameter.FABRICATION_PART_WIDTH_IN, BuiltInParameter.FABRICATION_SERVICE_PARAM,
@@ -211,15 +213,19 @@ namespace NumberDuctParts
                             selectedElements.Add(elem);
                         }
                     }
+                   
                 }
-                if(!selectedElements.Contains(ReferenceElem) && tools.getNumber(ReferenceElem) == "")
+                if (!selectedElements.Contains(ReferenceElem) && tools.getNumber(ReferenceElem) == "")
                 {
                     selectedElements.Add(ReferenceElem);
                 }
             }
             else
             {
-                selectedElements.Add(ReferenceElem);
+                if (getNumber(ReferenceElem) == "")
+                {
+                    selectedElements.Add(ReferenceElem);
+                }
             }
 
 
@@ -240,8 +246,16 @@ namespace NumberDuctParts
         {
             tools.selectedElements.Clear();
             tools.SelectionFilter filterS = new tools.SelectionFilter();
-            Reference refElement = tools.uidoc.Selection.PickObject(ObjectType.Element, new tools.SelectionFilter());
-            return tools.doc.GetElement(refElement);
+            try
+            {
+                Reference refElement = tools.uidoc.Selection.PickObject(ObjectType.Element, new tools.SelectionFilter());
+                return tools.doc.GetElement(refElement);
+            }
+            catch
+            {
+                return null;
+            }
+            
         }
 
 
@@ -314,21 +328,14 @@ namespace NumberDuctParts
         /// <returns></returns>
         public static string getNumber(Element element)
         {
-
             currentNumber = "";
-
-            Category category = element.Category;
-            BuiltInCategory enumCategory = (BuiltInCategory)category.Id.IntegerValue;
-            List<BuiltInCategory> allBuiltinCategories = FabricationCategories();
-
-            if (allBuiltinCategories.Contains(enumCategory))
-            {
-                if(element.get_Parameter(BuiltInParameter.FABRICATION_PART_ITEM_NUMBER).AsString() != null)
-                {
-                    var value = element.get_Parameter(BuiltInParameter.FABRICATION_PART_ITEM_NUMBER).AsString();
-                    currentNumber = value;
-                }             
-            } 
+ 
+            if(element.get_Parameter(BuiltInParameter.FABRICATION_PART_ITEM_NUMBER).AsString() != null)
+              {
+                 var value = element.get_Parameter(BuiltInParameter.FABRICATION_PART_ITEM_NUMBER).AsString();
+                 currentNumber = value;
+              }             
+            
             return currentNumber;
         }
 
@@ -404,59 +411,6 @@ namespace NumberDuctParts
                     {
                         doc.ActiveView.SetElementOverrides(item.Id, overrideGraphicSettings);
                     }
-
-                }
-
-                ResetView.Commit();
-            }
-        }
-
-
-        /// <summary>
-        /// Override colors in view by prefix
-        /// </summary>
-        public static void ColorInView()
-        {
-            using (Transaction ResetView = new Transaction(tools.uidoc.Document, "Reset view"))
-            {
-                ResetView.Start();
-                OverrideGraphicSettings overrideGraphicSettings = new OverrideGraphicSettings();
-
-                LogicalOrFilter logicalOrFilter = new LogicalOrFilter(filters());
-
-                var collector = new FilteredElementCollector(doc, doc.ActiveView.Id).WherePasses(
-                    logicalOrFilter).WhereElementIsNotElementType();
-
-                Dictionary<Element, string> elemtNPrefix = new Dictionary<Element, string>();
-                Dictionary<string, Color> colorNPrefix = new Dictionary<string, Color>();
-
-                //Create a Dictionary with Elements and its prefixes
-                foreach (var item in collector.ToElements())
-                {
-                    var number = getNumber(item);
-                    var itemNumber = GetNumberAndPrexif(number);
-                    if (itemNumber != null) { elemtNPrefix.Add(item, itemNumber.Item1); }
-
-                }
-
-                //Create a unique prefixes and an assigned color
-                foreach (var prefix in elemtNPrefix.Values.Distinct())
-                {
-                    //Chanchada
-                    System.Threading.Thread.Sleep(50);
-                    Random randonGen = new Random();
-                    Color randomColor = Color.FromArgb(1, randonGen.Next(255), randonGen.Next(255), randonGen.Next(255));
-                    colorNPrefix.Add(prefix, randomColor);
-
-                }
-
-                //Override colors following the already created schema of colors
-                foreach (var item in elemtNPrefix)
-                {
-
-                    overrideGraphicSettings.SetProjectionFillColor(new Autodesk.Revit.DB.Color(colorNPrefix[item.Value].R, colorNPrefix[item.Value].G, colorNPrefix[item.Value].B));
-                    overrideGraphicSettings.SetProjectionLineColor(new Autodesk.Revit.DB.Color(colorNPrefix[item.Value].R, colorNPrefix[item.Value].G, colorNPrefix[item.Value].B));
-                    doc.ActiveView.SetElementOverrides(item.Key.Id, overrideGraphicSettings);
 
                 }
 
