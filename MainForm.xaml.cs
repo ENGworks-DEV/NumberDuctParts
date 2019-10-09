@@ -30,7 +30,7 @@ namespace NumberDuctParts
 
         public UIApplication uiApp;
 
- 
+        public bool open = false;
 
         internal static string Separator
         {
@@ -537,6 +537,44 @@ namespace NumberDuctParts
             confirmDeleteForm.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             confirmDeleteForm.ShowDialog();
         }
+
+        /// <summary>
+        /// Button close form when clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+
+        /// <summary>
+        /// Button close form when clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Expand_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if(open)
+            {
+                
+                MainWindow.MinHeight = 272;
+                MainWindow.MaxHeight = 272;
+                open = false;
+            }
+            else
+            {
+                
+                MainWindow.MinHeight = 400;
+                MainWindow.MaxHeight = 400;
+                open = true;
+            }
+            
+        }
+
+
     }
 }
 

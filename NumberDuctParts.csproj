@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NumberDuctParts.addin" />
+    <Resource Include="Resources\Settings.png" />
     <EmbeddedResource Include="Resources\NumberDuctPartsLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
