@@ -102,3 +102,5 @@ C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\NumberD
 C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\NumberDuctParts.csprojAssemblyReference.cache
 C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\ConfirmDelete.g.cs
 C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\ConfirmDelete.baml
+C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\Settings.baml
+C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\Settings.g.cs

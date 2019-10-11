@@ -607,8 +607,10 @@
         <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
         <Setter Property="Height"  Value="38"/>
-        
-        
     </Style>
 
+    
+    
+    
+    
 </ResourceDictionary> 

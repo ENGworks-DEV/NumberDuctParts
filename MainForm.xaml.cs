@@ -32,6 +32,10 @@ namespace NumberDuctParts
 
         public bool open = false;
 
+        public bool checkBoxDuplicates;
+
+        public bool RoundDuctsBool;
+
         internal static string Separator
         {
             get;
@@ -39,6 +43,10 @@ namespace NumberDuctParts
         }
 
 
+        /// <summary>
+        /// Check if the suffix is a number or not
+        /// </summary>
+        /// <param name="cmddata_p"></param>
         public MainForm(ExternalCommandData cmddata_p)
         {
             this.p_commanddata = cmddata_p;
@@ -155,7 +163,7 @@ namespace NumberDuctParts
                 {
                     int countConnect = 0;
 
-                    if (checkRoundDucts(this.Round_Ducts.IsChecked.Value, tempElem))
+                    if (checkRoundDucts(RoundDuctsBool, tempElem))
                     {
                         RunElements.Add(tempElem);
                     }
@@ -260,7 +268,7 @@ namespace NumberDuctParts
                             AssingPartNumberT2.Start();
                             
                             //Find all the elements that are the same in the RunElements list
-                            tools.AddToSelection(elmnt, listToStringComplete, RunElements, this.checkBoxDuplicates.IsChecked.Value);
+                            tools.AddToSelection(elmnt, listToStringComplete, RunElements, checkBoxDuplicates);
 
                             //Generate the part number
                             string partNumber = tools.createNumbering(this.PrefixBox.Text, this.SeparatorBox.Text, tools.count, this.NumberBox.Text.Length);                     
@@ -365,6 +373,12 @@ namespace NumberDuctParts
             return Math.Abs(value1 - value2) <= 1.0;
         }
 
+
+        /// <summary>
+        /// Get the current conector of the element
+        /// </summary>
+        /// <param name="elm"></param>
+        /// <param name="conn"></param>
         private void CheckDoubleConn(ref int checkValue, ref ConnectorSet connectSet, ref Connector CurrentConnector)
         {
             List<Connector> connectorList = new List<Connector>();
@@ -411,6 +425,11 @@ namespace NumberDuctParts
         }
 
 
+        /// <summary>
+        /// Check if the adjacent element is valid
+        /// </summary>
+        /// <param name="elm"></param>
+        /// <param name="conn"></param>
         private bool isAdjacentValidElmt(Element elm, Connector conn)
         {
             bool validation = false;
@@ -418,21 +437,22 @@ namespace NumberDuctParts
             ConnectorSet TempConnectors = this.getConnectorSetFromElement(elm);
             foreach (Connector connec in TempConnectors)
             {
-                bool flag = connec.IsConnected && connec.ConnectorType.ToString() != "Curve";
-                if (flag)
+                if (connec.IsConnected && connec.ConnectorType.ToString() != "Curve")
                 {
                     originConnectors.Add(connec.Origin.ToString());
                 }
             }
-            bool flag2 = originConnectors.Contains(conn.Origin.ToString());
-            if (flag2)
+            if (originConnectors.Contains(conn.Origin.ToString()))
             {
                 validation = true;
             }
             return validation;
         }
 
-
+        /// <summary>
+        /// Get The connector set of an element
+        /// </summary>
+        /// <param name="elem"></param>
         private ConnectorSet getConnectorSetFromElement(Element elem)
         {
             ConnectorSet connectors = null;
@@ -466,7 +486,6 @@ namespace NumberDuctParts
         }
 
 
-
         /// <summary>
         /// Reset values in view
         /// </summary>
@@ -476,6 +495,7 @@ namespace NumberDuctParts
         {
             tools.resetView();
         }
+
 
         /// <summary>
         /// Show Color dialog and set selected color to variable
@@ -489,6 +509,7 @@ namespace NumberDuctParts
             ColorSelected = colorDialog.Color;
         }
 
+        
         /// <summary>
         /// if checkbox round ducts is checked filter round ducts
         /// </summary>
@@ -515,6 +536,7 @@ namespace NumberDuctParts
             return result;
         }
 
+
         /// <summary>
         /// Writes string used as separator to an internal field
         /// </summary>
@@ -524,6 +546,7 @@ namespace NumberDuctParts
         {
             Separator = this.SeparatorBox.Text;
         }
+
 
         /// <summary>
         /// Create an instance of the confirmDeleteForm.xaml
@@ -537,6 +560,7 @@ namespace NumberDuctParts
             confirmDeleteForm.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             confirmDeleteForm.ShowDialog();
         }
+
 
         /// <summary>
         /// Button close form when clicked
@@ -554,27 +578,55 @@ namespace NumberDuctParts
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            MainFormSettings SettingsForm = new MainFormSettings(this.p_commanddata);
+            SettingsForm.Topmost = true;
+            SettingsForm.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            SettingsForm.ShowDialog();
+
+            checkBoxDuplicates = SettingsForm.checkBoxDuplicates.IsChecked.Value;
+            RoundDuctsBool = SettingsForm.Round_Ducts.IsChecked.Value;
+        }
+
+
+        /// <summary>
+        /// Button collapse or expand options
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Expand_Click(object sender, RoutedEventArgs e)
         {
             
             if(open)
             {
                 
-                MainWindow.MinHeight = 272;
-                MainWindow.MaxHeight = 272;
+                MainWindow.MinHeight = 280;
+                MainWindow.MaxHeight = 280;
+                DisplaceDN.Visibility = System.Windows.Visibility.Hidden;
+                DiplaceUp.Visibility = System.Windows.Visibility.Hidden;
+                LineDivisionDisplace.Visibility = System.Windows.Visibility.Hidden;
+                LabelDisplace.Visibility = System.Windows.Visibility.Hidden;
+                ResetValuesButton.Visibility = System.Windows.Visibility.Hidden;
+                ResetColorButton.Visibility = System.Windows.Visibility.Hidden;
                 open = false;
             }
             else
             {
                 
-                MainWindow.MinHeight = 400;
-                MainWindow.MaxHeight = 400;
+                MainWindow.MinHeight = 430;
+                MainWindow.MaxHeight = 430;
+                DisplaceDN.Visibility = System.Windows.Visibility.Visible;
+                DiplaceUp.Visibility = System.Windows.Visibility.Visible;
+                LineDivisionDisplace.Visibility = System.Windows.Visibility.Visible;
+                LabelDisplace.Visibility = System.Windows.Visibility.Visible;
+                ResetValuesButton.Visibility = System.Windows.Visibility.Visible;
+                ResetColorButton.Visibility = System.Windows.Visibility.Visible;
+
                 open = true;
-            }
-            
+            }  
         }
-
-
     }
+
 }
 
