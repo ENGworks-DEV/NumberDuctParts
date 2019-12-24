@@ -56,8 +56,7 @@ namespace NumberDuctParts
             this._doc = uiDoc.Document;
             List<string> conf = tools.readConfig();
             MainForm.ColorSelected = System.Drawing.Color.FromArgb(1, 255, 0, 0);
-            bool flag = conf != null && conf.Count == 3;
-            if (flag)
+            if (conf != null && conf.Count == 3)
             {
                 this.PrefixBox.Text = conf[0];
                 this.SeparatorBox.Text = conf[1];
@@ -99,20 +98,21 @@ namespace NumberDuctParts
             base.Hide();
             Element e;
 
+
+            //Select the element only if it is a part number
             using (Transaction AssingPartNumberT = new Transaction(tools.uidoc.Document, "Assing Part Number"))
             {
                 AssingPartNumberT.Start();
                 e = tools.NewSelection();
                 AssingPartNumberT.Commit();          
             }
-
             if(e == null)
             {
                 goto CloseApp;
             }
 
-            ConnectorSet connectors = null;
-            connectors = this.getConnectorSetFromElement(e);
+
+            ConnectorSet connectors = this.getConnectorSetFromElement(e);
             int connectCount = 0;
 
 
@@ -120,8 +120,7 @@ namespace NumberDuctParts
             foreach (Connector c in connectors)
             {
                 //Conector must be connected, must be a End conector and should have another element connected to it.
-                bool flag = c.IsConnected && c.ConnectorType.ToString() != "Curve" && this.ConnectionCheck(c) != 0;
-                if (flag)
+                if (c.IsConnected && c.ConnectorType.ToString() != "Curve" && this.ConnectionCheck(c) != 0)
                 {
                     connectCount += this.ConnectionCheck(c);
                     CurrentConnector = c;
@@ -133,8 +132,7 @@ namespace NumberDuctParts
             {
                 //check if the element is a false positive
                 this.CheckDoubleConn(ref connectCount, ref connectors, ref CurrentConnector);
-                bool flag3 = connectCount >= 2;
-                if (flag3)
+                if (connectCount >= 2)
                 {
                     System.Windows.MessageBox.Show("The elements is not an endpoint", "warning");
                     goto CloseApp;
@@ -157,8 +155,6 @@ namespace NumberDuctParts
                 int iterationsCount = 0;
                 TempConnectors = connectors;
 
-
-
                 while (tempValue == 1)
                 {
                     int countConnect = 0;
@@ -170,25 +166,27 @@ namespace NumberDuctParts
 
                     RunElementsId.Add(tempElem.Id);
 
+                    //Make sure that the elements are conected if connectors
+                    //are geometrically aligned
                     foreach (Connector fcon in TempConnectors)
                     {
-                        bool flag6 = fcon.IsConnected && fcon.ConnectorType.ToString() != "Curve";
-                        if (flag6)
+                        if (ConnectorsHelper.ConnStatus(fcon))
                         {
-                            bool flag7 = this.ConnectionCheck(fcon) != 0;
-                            if (flag7)
+                            if (this.ConnectionCheck(fcon) != 0)
                             {
                                 countConnect++;
-                                bool isEmpty = fcon.AllRefs.IsEmpty;
-                                if (isEmpty)
-                                {
-                                    TaskDialog.Show("sss", "ddd");
-                                }
                             }
                         }
                     }
-                    bool flag8 = countConnect == 1 && iterationsCount != 0;
-                    if (flag8)
+
+                    //Check if the element is a tee
+                    if(ConnectorsHelper.TeeDetect(TempConnectors))
+                    {
+                        tempValue = 2;
+                        goto EndLoop;
+                    }
+
+                    if (countConnect == 1 && iterationsCount != 0)
                     {
                         tempValue = 2;
                         goto EndLoop;
@@ -198,8 +196,8 @@ namespace NumberDuctParts
                         ConnectorSet secondary = CurrentConnector.AllRefs;
                         foreach (Connector cone in secondary)
                         {
-                            bool flag9 = !RunElementsId.Contains(cone.Owner.Id);
-                            if (flag9)
+                           
+                            if (!RunElementsId.Contains(cone.Owner.Id))
                             {
                                 //Check if the following element is connected from the side
                                 tempElem = this._doc.GetElement(cone.Owner.Id);
@@ -223,7 +221,7 @@ namespace NumberDuctParts
                         foreach (Connector connec in TempConnectors)
                         {
                             //Check that the previous element is not connecting from side
-                            if (connec.ConnectorType.ToString() == "Curve")
+                            if (!ConnectorsHelper.ConnStatus(connec))
                             {
                                 foreach (Connector con in connec.AllRefs)
                                 {
@@ -236,13 +234,11 @@ namespace NumberDuctParts
                             }
 
                             //Get the next useful connector
-                            bool flag10 = connec.IsConnected && connec.ConnectorType.ToString() != "Curve";
-                            if (flag10)
+                            if (ConnectorsHelper.ConnStatus(connec))
                             {
                                 foreach (Connector con in connec.AllRefs)
                                 {
-                                    bool flag11 = !RunElementsId.Contains(con.Owner.Id);
-                                    if (flag11)
+                                    if (!RunElementsId.Contains(con.Owner.Id))
                                     {
                                         CurrentConnector = connec;
                                     }
@@ -334,6 +330,8 @@ namespace NumberDuctParts
             int tempInt = 0;
             ConnectorSet secondary = con.AllRefs;
             ConnectorSet TempConnectors = null;
+
+            //
             foreach (Connector f in secondary)
             {
                 Element tempElem = this._doc.GetElement(f.Owner.Id);
@@ -345,19 +343,16 @@ namespace NumberDuctParts
                   TempConnectors = this.getConnectorSetFromElement(tempElem);
                 }
             }
-            bool flag = TempConnectors != null;
-            if (flag)
+
+            if (TempConnectors != null)
             {
                 foreach (Connector connec in TempConnectors)
                 {
-                    bool flag2 = MainForm.CloseEnoughForMe(connec.Origin.X, con.Origin.X);
-                    if (flag2)
+                    if (MainForm.CloseEnoughForMe(connec.Origin.X, con.Origin.X))
                     {
-                        bool flag3 = MainForm.CloseEnoughForMe(connec.Origin.Y, con.Origin.Y);
-                        if (flag3)
+                        if (MainForm.CloseEnoughForMe(connec.Origin.Y, con.Origin.Y))
                         {
-                            bool flag4 = MainForm.CloseEnoughForMe(connec.Origin.Z, con.Origin.Z);
-                            if (flag4)
+                            if (MainForm.CloseEnoughForMe(connec.Origin.Z, con.Origin.Z))
                             {
                                 tempInt = 1;
                             }
