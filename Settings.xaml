@@ -34,15 +34,12 @@
             <Button Style="{DynamicResource CloseButtonStyle}" Name="CloseButton" Foreground="Black" BorderThickness="0" Click="Close_Click" Background="Transparent" VerticalAlignment="Top" Grid.Column="2" Height="21" FontSize="16" FontWeight="Bold" Margin="4,12,11,0">X</Button>
 
 
-            <CheckBox Name="checkBoxDuplicates" Content="Equal Elemnts" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" Width="18" Height="18" Grid.Column="1" />
+            <CheckBox Name="checkBoxDuplicates" Content="Equal Elemnts" HorizontalAlignment="Left" Margin="8,52,0,0" VerticalAlignment="Top" Width="18" Height="18" Grid.Column="1" />
             <TextBox Name="textBox" HorizontalAlignment="Left" Height="16" Margin="37,52,0,0" TextWrapping="Wrap" Text=" NUMBER DUPLICATE ELEMENTS" VerticalAlignment="Top" Width="187" BorderBrush="#FFFFFFFF" FontFamily="Roboto" Grid.Column="1" Grid.ColumnSpan="2" />
-            <CheckBox x:Name="Round_Ducts" Content="" HorizontalAlignment="Left" Margin="8,132,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-            <TextBox x:Name="textBox_Copy" HorizontalAlignment="Left" Height="16" Margin="41,131,0,0" TextWrapping="Wrap" Text="INCLUDE ROUND DUCTS" VerticalAlignment="Top" Width="187" BorderBrush="#FFFFFFFF" FontFamily="Roboto" Grid.Column="1" Grid.ColumnSpan="2" />
-            <TextBox x:Name="textBox_Copy1" HorizontalAlignment="Left" Height="16" Margin="37,92,0,0" TextWrapping="Wrap" Text=" INCLUDE ALL ELEMENTS IN VIEW" VerticalAlignment="Top" Width="191" BorderBrush="#FFFFFFFF" FontFamily="Roboto" Grid.Column="1" Grid.ColumnSpan="2" />
-            <CheckBox x:Name="checkBoxDuplicatesInView" Content="Equal Elemnts" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top" Width="18" Height="18" Grid.Column="1" />
-            <RadioButton x:Name="SnglElmtButton" Grid.ColumnSpan="2" Content="Single element" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top"/>
-            <RadioButton x:Name="SglRunButton" Grid.ColumnSpan="2" Content="Single Run" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"/>
-            <RadioButton x:Name="CmpltRunButton" Grid.ColumnSpan="2" Content="Complete run" HorizontalAlignment="Left" Margin="10,207,0,0" VerticalAlignment="Top"/>
+            <CheckBox x:Name="Round_Ducts" Content="" HorizontalAlignment="Left" Margin="8,94,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+            <TextBox x:Name="textBox_Copy" HorizontalAlignment="Left" Height="16" Margin="41,94,0,0" TextWrapping="Wrap" Text="INCLUDE ROUND DUCTS" VerticalAlignment="Top" Width="187" BorderBrush="#FFFFFFFF" FontFamily="Roboto" Grid.Column="1" Grid.ColumnSpan="2" />
+            <RadioButton x:Name="SnglElmtButton" Grid.ColumnSpan="2" Content="Single element" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top"/>
+            <RadioButton x:Name="CmpltRunButton" Grid.ColumnSpan="2" Content="Complete run" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top"/>
 
 
         </Grid>

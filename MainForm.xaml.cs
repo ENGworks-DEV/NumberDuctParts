@@ -36,6 +36,8 @@ namespace NumberDuctParts
 
         public bool RoundDuctsBool;
 
+        public bool SnglElmtButton = true;
+
         internal static string Separator
         {
             get;
@@ -106,7 +108,9 @@ namespace NumberDuctParts
                 e = tools.NewSelection();
                 AssingPartNumberT.Commit();          
             }
-            if(e == null)
+
+            //Make sure that the user selected a valid element
+            if (e == null)
             {
                 goto CloseApp;
             }
@@ -122,27 +126,29 @@ namespace NumberDuctParts
                 //Conector must be connected, must be a End conector and should have another element connected to it.
                 if (c.IsConnected && c.ConnectorType.ToString() != "Curve" && this.ConnectionCheck(c) != 0)
                 {
-                    connectCount += this.ConnectionCheck(c);
+                    connectCount += 1;
                     CurrentConnector = c;
                 }
             }
-            
+
+            //Check if the element is isolated
+            if (connectCount == 0 || SnglElmtButton)
+            {
+                RunElements.Add(e);
+                connectCount = 0;
+            }
+
             //Check if the element has more than 2 connections
             if (connectCount >= 2)
             {
                 //check if the element is a false positive
                 this.CheckDoubleConn(ref connectCount, ref connectors, ref CurrentConnector);
+
                 if (connectCount >= 2)
                 {
                     System.Windows.MessageBox.Show("The elements is not an endpoint", "warning");
                     goto CloseApp;
                 }
-            }
-
-            //Check if the element is isolated
-            if (connectCount == 0)
-            {
-                RunElements.Add(e);
             }
 
             //Check if the element has 1 connection
@@ -263,6 +269,7 @@ namespace NumberDuctParts
                             tools.selectedElements.Clear();
                             AssingPartNumberT2.Start();
                             
+                        
                             //Find all the elements that are the same in the RunElements list
                             tools.AddToSelection(elmnt, listToStringComplete, RunElements, checkBoxDuplicates);
 
@@ -331,7 +338,6 @@ namespace NumberDuctParts
             ConnectorSet secondary = con.AllRefs;
             ConnectorSet TempConnectors = null;
 
-            //
             foreach (Connector f in secondary)
             {
                 Element tempElem = this._doc.GetElement(f.Owner.Id);
@@ -348,18 +354,15 @@ namespace NumberDuctParts
             {
                 foreach (Connector connec in TempConnectors)
                 {
-                    if (MainForm.CloseEnoughForMe(connec.Origin.X, con.Origin.X))
+                    if (MainForm.CloseEnoughForMe(connec.Origin.X, con.Origin.X) &&
+                        MainForm.CloseEnoughForMe(connec.Origin.Y, con.Origin.Y) &&
+                        MainForm.CloseEnoughForMe(connec.Origin.Z, con.Origin.Z))
                     {
-                        if (MainForm.CloseEnoughForMe(connec.Origin.Y, con.Origin.Y))
-                        {
-                            if (MainForm.CloseEnoughForMe(connec.Origin.Z, con.Origin.Z))
-                            {
-                                tempInt = 1;
-                            }
-                        }
+                        tempInt = 1;
                     }
                 }
             }
+
             return tempInt;
         }
 
@@ -379,27 +382,23 @@ namespace NumberDuctParts
             List<Connector> connectorList = new List<Connector>();
             List<Element> adjacentElement = new List<Element>();
 
-            //Get connectors of the element
+
             foreach (Connector c in connectSet)
             {
-                if (c.IsConnected && c.ConnectorType.ToString() != "Curve")
+                if (ConnectorsHelper.ConnStatus(c))
                 {
-                    connectorList.Add(c);
-                }
-            }
-
-            foreach (Connector c2 in connectorList)
-            {
-                ConnectorSet secondary = c2.AllRefs;
-                foreach (Connector cone in secondary)
-                {
+                    ConnectorSet secondary = c.AllRefs;
+                    foreach (Connector cone in secondary)
+                    {
                     adjacentElement.Add(this._doc.GetElement(cone.Owner.Id));
+                    }
                 }
             }
 
             adjacentElement = adjacentElement.Distinct<Element>().ToList<Element>();
             Connector temConnector = null;
             int count = 0;
+
             foreach (Element elem in adjacentElement)
             {
                 foreach (Connector c3 in connectorList)
@@ -582,6 +581,7 @@ namespace NumberDuctParts
 
             checkBoxDuplicates = SettingsForm.checkBoxDuplicates.IsChecked.Value;
             RoundDuctsBool = SettingsForm.Round_Ducts.IsChecked.Value;
+            SnglElmtButton = SettingsForm.SnglElmtButton.IsChecked.Value;
         }
 
 
