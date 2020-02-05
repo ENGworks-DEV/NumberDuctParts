@@ -104,9 +104,9 @@ C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\Confirm
 C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\ConfirmDelete.baml
 C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\Settings.baml
 C:\Users\V. Noves\source\repos\NumberDuctParts\NumberDuctParts\obj\Debug\Settings.g.cs
-C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\Resources\NumberDuctPartsLogo.png
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\NumberDuctParts.dll
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\NumberDuctParts.pdb
+<<<<<<< HEAD
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\RevitAPI.dll
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\RevitAPIUI.dll
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\RevitAPIFoundation.dll
@@ -173,14 +173,23 @@ C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\pt-BR\AdWindows.resources
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\ru-RU\AdWindows.resources.dll
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\zh-CN\AdWindows.resources.dll
 C:\Users\vnoves\source\repos\NumberDuctParts\bin\Debug\zh-TW\AdWindows.resources.dll
+=======
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\MainForm.baml
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Settings.baml
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\ConfirmDelete.g.cs
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\MainForm.g.cs
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Resources.g.cs
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Settings.g.cs
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\SuffixContent.g.cs
+>>>>>>> 26c6ca773bde8d4580615f233e48ce665289bffb
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts_MarkupCompile.cache
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts_MarkupCompile.lref
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts.g.resources
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts.csproj.CoreCompileInputs.cache
-C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts.csproj.CopyComplete
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts.dll
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts.pdb
+<<<<<<< HEAD
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Views\MainForm.baml
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Views\Settings.baml
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Views\MainForm.g.cs
@@ -191,3 +200,6 @@ C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Views\Resources.baml
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Views\SuffixContent.baml
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Views\ConfirmDelete.g.cs
 C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\Views\ConfirmDelete.baml
+=======
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\NumberDuctParts.csprojAssemblyReference.cache
+>>>>>>> 26c6ca773bde8d4580615f233e48ce665289bffb

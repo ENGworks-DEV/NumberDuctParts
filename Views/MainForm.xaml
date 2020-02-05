@@ -7,7 +7,7 @@
         MinHeight="280" MinWidth="280" 
         MaxHeight="400" MaxWidth="280" 
         WindowStartupLocation="CenterScreen" 
-        ResizeMode="NoResize" Title="NUMBER DUCT PARTS" 
+        ResizeMode="NoResize" 
         Style="{DynamicResource CustomWindowStyle}" 
         WindowStyle="None"  >
 
