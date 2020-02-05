@@ -41,48 +41,49 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="ConfirmDelete.xaml.cs">
+    <Compile Include="Utils\CommonAssemblyInfo.cs" />
+    <Compile Include="Views\ConfirmDelete.xaml.cs">
       <DependentUpon>ConfirmDelete.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Connectors.cs" />
-    <Compile Include="MainForm.xaml.cs">
+    <Compile Include="Model\Connectors.cs" />
+    <Compile Include="Views\MainForm.xaml.cs">
       <DependentUpon>MainForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NumberMain.cs" />
+    <Compile Include="Core\NumberMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.xaml.cs">
+    <Compile Include="Views\Resources.xaml.cs">
       <DependentUpon>Resources.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings.xaml.cs">
+    <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StyleableWindow\ControlDoubleClickBehavior.cs" />
-    <Compile Include="StyleableWindow\ShowSystemMenuBehavior.cs" />
-    <Compile Include="StyleableWindow\SystemMenuManager.cs" />
-    <Compile Include="StyleableWindow\WindowCloseCommand.cs" />
-    <Compile Include="StyleableWindow\WindowDragBehavior.cs" />
-    <Compile Include="StyleableWindow\WindowMaximizeCommand.cs" />
-    <Compile Include="StyleableWindow\WindowMinimizeCommand.cs" />
-    <Compile Include="StyleableWindow\WindowResizeBehavior.cs" />
-    <Compile Include="SuffixContent.xaml.cs">
+    <Compile Include="Views\StyleableWindow\ControlDoubleClickBehavior.cs" />
+    <Compile Include="Views\StyleableWindow\ShowSystemMenuBehavior.cs" />
+    <Compile Include="Views\StyleableWindow\SystemMenuManager.cs" />
+    <Compile Include="Views\StyleableWindow\WindowCloseCommand.cs" />
+    <Compile Include="Views\StyleableWindow\WindowDragBehavior.cs" />
+    <Compile Include="Views\StyleableWindow\WindowMaximizeCommand.cs" />
+    <Compile Include="Views\StyleableWindow\WindowMinimizeCommand.cs" />
+    <Compile Include="Views\StyleableWindow\WindowResizeBehavior.cs" />
+    <Compile Include="Views\SuffixContent.xaml.cs">
       <DependentUpon>SuffixContent.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="NumberDuctParts.addin" />
     <Resource Include="Resources\Settings.png" />
-    <EmbeddedResource Include="Resources\NumberDuctPartsLogo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NumberDuctPartsLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
       <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPIUI">
       <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -97,31 +98,35 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ConfirmDelete.xaml">
+    <Page Include="Views\ConfirmDelete.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainForm.xaml">
+    <Page Include="Views\MainForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources.xaml">
+    <Page Include="Views\Resources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Settings.xaml">
+    <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SuffixContent.xaml">
+    <Page Include="Views\SuffixContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(AppData)\Autodesk\REVIT\Addins\2020" copy "$(ProjectDir)*.addin" "$(AppData)\Autodesk\REVIT\Addins\2020"
-if exist "$(AppData)\Autodesk\REVIT\Addins\2020" copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2020"</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug if exist "$(AppData)\Autodesk\REVIT\Addins\2018" copy "$(ProjectDir)*.addin" "$(AppData)\Autodesk\REVIT\Addins\2018"
+if $(ConfigurationName) == Debug if exist "$(AppData)\Autodesk\REVIT\Addins\2018" copy "$(ProjectDir)$(OutputPath)*.dll" "$(AppData)\Autodesk\REVIT\Addins\2018"
+if $(ConfigurationName) == Release if exist "$(ProjectDir)\Engworks.pfx" "C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe" sign /f  "$(ProjectDir)\Engworks.pfx" /p Engw123. /t http://timestamp.verisign.com/scripts/timstamp.dll "$(ProjectDir)$(OutputPath)*.dll"
+if $(ConfigurationName) == Release copy "$(ProjectDir)*.addin" "$(ProjectDir)$(OutputPath)"
+if $(ConfigurationName) == Release (powershell Compress-Archive -Path '$(ProjectDir)$(OutputPath)*.dll', '$(ProjectDir)$(OutputPath)*.addin' -DestinationPath '$(ProjectDir)$(OutputPath)$(ProjectName)' -Force)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

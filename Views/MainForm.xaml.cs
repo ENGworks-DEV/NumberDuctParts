@@ -51,6 +51,7 @@ namespace NumberDuctParts
         /// <param name="cmddata_p"></param>
         public MainForm(ExternalCommandData cmddata_p)
         {
+            this.DataContext = this;
             this.p_commanddata = cmddata_p;
             this.InitializeComponent();
             this.uiApp = cmddata_p.Application;
@@ -66,6 +67,12 @@ namespace NumberDuctParts
             }
         }
 
+        public string projectVersion = CommonAssemblyInfo.Number;
+        public string ProjectVersion
+        {
+            get { return projectVersion; }
+            set { projectVersion = value; }
+        }
 
         /// <summary>
         /// Check if the suffix is a number or not
@@ -584,6 +591,16 @@ namespace NumberDuctParts
             SnglElmtButton = SettingsForm.SnglElmtButton.IsChecked.Value;
         }
 
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+
+        {
+            this.DragMove();
+        }
+
+        private void Title_Link(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://engworks.com/Number-Duct-parts/");
+        }
 
         /// <summary>
         /// Button collapse or expand options

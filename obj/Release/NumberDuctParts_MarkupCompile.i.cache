@@ -4,17 +4,17 @@
 library
 C#
 .cs
-C:\Users\vnoves\source\repos\NumberDuctParts\obj\Debug\
+C:\Users\vnoves\source\repos\NumberDuctParts\obj\Release\
 NumberDuctParts
 none
 false
-DEBUG;TRACE
+TRACE
 
 5884425316
 1-1632465461
-18-853579854
+191555060183
 17-559533468
 Views\ConfirmDelete.xaml;Views\MainForm.xaml;Views\Resources.xaml;Views\Settings.xaml;Views\SuffixContent.xaml;
 
-False
+True
 

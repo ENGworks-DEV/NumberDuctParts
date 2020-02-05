@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Name="MainWindow"
-        Height="280" Width="280" 
+        Height="297.825" Width="280" 
         MinHeight="280" MinWidth="280" 
         MaxHeight="400" MaxWidth="280" 
         WindowStartupLocation="CenterScreen" 
@@ -19,12 +19,15 @@
         <CommandBinding Command="SelectAll" Executed="NumberPartButton_Click" />
     </Window.CommandBindings>
 
-    <Border Background="White" BorderBrush="Transparent" BorderThickness="1,1,1,1" CornerRadius="5,5,5,5" Margin="15,-13,15,13">
+    <Border Background="White" BorderBrush="Transparent" BorderThickness="1,1,1,1" 
+            CornerRadius="5,5,5,5" Margin="15,10,15,13" MouseDown="Border_MouseDown">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="20" Color="Gray" Opacity="0.3" ShadowDepth="0" Direction="0"></DropShadowEffect>
+            <DropShadowEffect BlurRadius="20" Color="Gray" Opacity="0.3" ShadowDepth="0" 
+                              Direction="0"></DropShadowEffect>
         </Border.Effect>
 
-        <Grid Margin="9,9,11,0" Background="Transparent" Height="356" VerticalAlignment="Top">
+        <Grid Margin="9,9,11,-160" Background="Transparent" Height="424" 
+              VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0*" />
                 <ColumnDefinition Width="33*" />
@@ -35,6 +38,12 @@
                 <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
 
+            <!--Title Bar elements--> 
+            <Button Style="{DynamicResource CloseButtonStyle}" Name="CloseButton" Foreground="Black" BorderThickness="0" Click="Close_Click" Background="Transparent" VerticalAlignment="Top" Grid.Column="2" Height="21" FontSize="16" FontWeight="Bold" Margin="4,12,11,0">X</Button>
+            <Button Style="{DynamicResource SettingsButtonStyle}" Grid.ColumnSpan="2" Background="Transparent" BorderBrush="Transparent" Margin="182,15,2,380" Height="Auto" Click="Settings_Click"/>
+            <Label Style="{DynamicResource Labels}" Content="{Binding Path=ProjectVersion}" Margin="6,31,0,0" Height="15" VerticalAlignment="Top" FontFamily="Roboto" HorizontalAlignment="Left" Width="38" RenderTransformOrigin="0.776,0.792" Grid.ColumnSpan="2" />
+            <Button Style="{DynamicResource CloseButtonStyle}" Name="TtitleButton" Foreground="Black" BorderThickness="0" Click="Title_Link" Background="Transparent" VerticalAlignment="Top" Height="24" FontSize="20" FontWeight="Bold" Margin="5,9,77,0" Grid.ColumnSpan="2">NUM DUCTS</Button>
+        
             <!--Main Form elements-->
             <TextBox Name="PrefixBox" Style="{DynamicResource MainTextBox}" Margin="5,92,0,0" TextWrapping="Wrap" Text="ABCDEFGHIJK" Grid.Column="1" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="104" />
             <TextBox Name="NumberBox" Style="{DynamicResource MainTextBox}" Margin="0,92,10,0" TextWrapping="Wrap" Text="000" Grid.Column="1" Height="30" VerticalAlignment="Top" BorderThickness="0.6" HorizontalAlignment="Right" Width="56" TextChanged="textChangedEventHandler" Grid.ColumnSpan="2" />
@@ -43,11 +52,6 @@
             <Label Style="{DynamicResource Labels}" Content="Sep" Margin="110,69,0,0" Grid.Column="1" Height="24" VerticalAlignment="Top" FontFamily="Roboto" HorizontalAlignment="Left" Width="49" />
             <Button Name="button" Style="{DynamicResource MainButtonStyle}" Grid.ColumnSpan="3" Content="SELECT ELEMENT" HorizontalAlignment="Left" Margin="5,141,0,0" VerticalAlignment="Top" Width="213" Tag="" Click="NumberPartButton_Click" />
             <TextBox x:Name="SeparatorBox" Style="{DynamicResource MainTextBox}" Height="30" Margin="121,92,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" MaxLength="1" BorderThickness="0.6" Grid.Column="1" HorizontalAlignment="Left" Width="30" TextChanged="SeparatorBox_TextChanged" RenderTransformOrigin="0.441,0.55" />
-
-            <!--Title Bar elements-->
-            <TextBlock x:Name="TextTitle" Grid.Column="1" HorizontalAlignment="Left" Margin="7,12,0,0" TextWrapping="Wrap" Text="Number Ducts" Width="126" FontFamily="Roboto Bold" FontSize="18" Focusable="False" AllowDrop="False" Foreground="Black" Height="23" VerticalAlignment="Top"/>
-            <Button Style="{DynamicResource CloseButtonStyle}" Name="CloseButton" Foreground="Black" BorderThickness="0" Click="Close_Click" Background="Transparent" VerticalAlignment="Top" Grid.Column="2" Height="21" FontSize="16" FontWeight="Bold" Margin="4,12,11,0">X</Button>
-            <Button Style="{DynamicResource SettingsButtonStyle}" Grid.ColumnSpan="2" Background="Transparent" BorderBrush="Transparent" Margin="181,0,3,314" Height="15" VerticalAlignment="Bottom" Click="Settings_Click"/>
 
             <!--Expandable elements-->
             <Rectangle  HorizontalAlignment="Stretch"  VerticalAlignment="Top" Fill="Gray" Height="2" Margin="7,199,11,0" Opacity="0.1" Grid.Column="1" Grid.ColumnSpan="2"/>
