@@ -4,8 +4,6 @@
 
 This is a Revit add-in that help you numbering fabrication ducts elements for spooling
 
-## Examples
-
 
 ## Revit tested versions
 
